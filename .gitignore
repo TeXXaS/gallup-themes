@@ -1,3 +1,6 @@
 /wiki-countries/*.html
 .idea
 *.iml
+.ipynb_checkpoints
+.~lock*
+data.json

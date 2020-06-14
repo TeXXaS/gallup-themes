@@ -106,7 +106,7 @@ countries = [
             "Australia/Darwin",
             "Australia/Perth"
         ],
-        "population": 25738400
+        "population": 25739400
     },
     {
         "name": "Azerbaijan",
@@ -735,7 +735,7 @@ countries = [
         "timezones": [
             "Asia/Jerusalem"
         ],
-        "population": 9207610
+        "population": 9208080
     },
     {
         "name": "India",
@@ -1199,7 +1199,7 @@ countries = [
             "Pacific/Auckland",
             "Pacific/Chatham"
         ],
-        "population": 5007060
+        "population": 5007260
     },
     {
         "name": "Oman",
@@ -2062,55 +2062,61 @@ countries = [
             "Europe/London"
         ],
         "population": 67886004
+    },
+    {
+        "name": "Bermuda",
+        "code": "BM",
+        "capital": "Hamilton",
+        "continent": "North America",
+        "timezones": [],
+        "population": 71176
+    },
+    {
+        "name": "Cayman Islands",
+        "code": "KY",
+        "capital": "George Town",
+        "continent": "North America",
+        "timezones": [],
+        "population": 65813
+    },
+    {
+        "name": "Equador",
+        "code": "EC",
+        "capital": "Quito",
+        "continent": "South America",
+        "timezones": [],
+        "population": 17084358
+    },
+    {
+        "name": "State of Palestine",
+        "code": "PS",
+        "capital": "Jerusalem",
+        "continent": "Asia",
+        "timezones": [],
+        "population": 5051953
+    },
+    {
+        "name": "Puerto Rico",
+        "code": "PR",
+        "capital": "San Juan",
+        "continent": "North America",
+        "timezones": [],
+        "population": 3193694
+    },
+    {
+        "name": "Taiwan",
+        "code": "TW",
+        "capital": "Taipei",
+        "continent": "Asia",
+        "timezones": [],
+        "population": 23780452
+    },
+    {
+        "name": "United States Virgin Islands",
+        "code": "VI",
+        "capital": "Charlotte Amalie",
+        "continent": "North America",
+        "timezones": [],
+        "population": 106405
     }
 ]
-
-'''
-Bermuda
-country not found - Bermuda
-!! processing for country
-coordinates for Bermuda->None
-https://nominatim.openstreetmap.org/search.php?q=Bermuda&format=json
-
-Cayman Islands
-country not found - Cayman Islands
-!! processing for country
-coordinates for Cayman Islands->None
-https://nominatim.openstreetmap.org/search.php?q=Cayman%20Islands&format=json
-
-China
-country not found - China
-!! processing for country
-coordinates for China->None
-https://nominatim.openstreetmap.org/search.php?q=China&format=json
-
-Equador
-country not found - Equador
-!! processing for country
-coordinates for Equador->None
-https://nominatim.openstreetmap.org/search.php?q=Equador&format=json
-
-Palestine
-country not found - Palestine
-!! processing for country
-coordinates for Palestine->None
-https://nominatim.openstreetmap.org/search.php?q=Palestine&format=json
-
-Puerto Rico
-country not found - Puerto Rico
-!! processing for country
-coordinates for Puerto Rico->None
-https://nominatim.openstreetmap.org/search.php?q=Puerto%20Rico&format=json
-
-Taiwan
-country not found - Taiwan
-!! processing for country
-coordinates for Taiwan->None
-https://nominatim.openstreetmap.org/search.php?q=Taiwan&format=json
-
-US Virgin Islands
-country not found - US Virgin Islands
-!! processing for country
-coordinates for US Virgin Islands->None
-https://nominatim.openstreetmap.org/search.php?q=US%20Virgin%20Islands&format=json
-'''

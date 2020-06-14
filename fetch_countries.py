@@ -29,12 +29,14 @@ def read_countries_from_wikipedia():
     """Read pages from wiki, and store locally. Yes Wikipedia is against crowling, but here amount is small, and storing
     data helps limit load at Wikipedia side + sleep added"""
     for country in countries:
-        if not country['name'] in ('Macedonia'):
-            print("-><- ")
-            continue
+        # if not country['name'] in ('Macedonia'):
+        #     print("-><- ")
+        #     continue
 
         if country['name'] == 'Macedonia':
             country_name = quote('North Macedonia')
+        elif country['name'] == 'Palestine':
+            country_name = quote('State of Palestine')
         else:
             country_name = quote(country['name'])
 
@@ -84,8 +86,11 @@ def read_population(soup):
         if result.nextSibling is not None and result.nextSibling.__dict__.get('name', '') == 'td':
             result = result.nextSibling.text
         else:
-            result = result.parent.nextSibling
-            result = result.find('td').text
+            try:
+                result = result.parent.nextSibling
+                result = result.find('td').text
+            except AttributeError:
+                return None
     else:
         result = result.parent.parent.nextSibling
         result = result.find('td').text
@@ -123,4 +128,5 @@ def read_population(soup):
 
 
 if __name__ == "__main__":
+    #read_countries_from_wikipedia()
     load_data_from_wiki_files_to_countryinfo()
