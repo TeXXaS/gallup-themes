@@ -106,9 +106,9 @@ def convert_to_excel(from_name, to_name):
                 continue
             found = respondents_re.findall(l)
             if found:
-                respondants = found[0]
-                # print(respondants)
-                row['respondants'] = int(respondants)
+                respondents = found[0]
+                # print(respondents)
+                row['respondents'] = int(respondents)
                 continue
             found = result_re.findall(l)
             if found:
