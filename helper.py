@@ -3,13 +3,15 @@ import pandas as pd
 from countryinfo import countries
 import requests
 from urllib.parse import quote
+from branca.element import MacroElement
+from jinja2 import Template
 
 country_re = re.compile(r'''^[A-Za-z ]+$''')
 respondents_re = re.compile(r'''^GROUP OF ([0-9]*) RESPONDENTS$''')
 result_re = re.compile(r'''^(?P<name>[A-Za-z]+) (?P<value>[0-9]+)$''')
 
 
-def find_capital(country_name):
+def _find_capital(country_name):
     for country in countries:
         if country['name'] == country_name:
             return country['capital']
@@ -17,7 +19,7 @@ def find_capital(country_name):
     return None
 
 
-def find_population(country_name):
+def _find_population(country_name):
     for country in countries:
         if country['name'] == country_name:
             return country['population']
@@ -25,7 +27,7 @@ def find_population(country_name):
     return None
 
 
-def fetch_coordinates(country_name, city_name):
+def _fetch_coordinates(country_name, city_name):
     if city_name is not None:
         url = f'https://nominatim.openstreetmap.org/search.php?city={quote(city_name)}&country={quote(country_name)}&format=json'
     else:
@@ -35,19 +37,19 @@ def fetch_coordinates(country_name, city_name):
     return buf.json()
 
 
-def get_coordinates(country_name, city_name):
+def _get_coordinates(country_name, city_name):
     print(f"coordinates for {country_name}->{city_name}")
     if city_name:
-        response = fetch_coordinates(country_name, city_name)
+        response = _fetch_coordinates(country_name, city_name)
         if len(response) == 0:
             print("city not located")
-            response = fetch_coordinates(country_name, None)
+            response = _fetch_coordinates(country_name, None)
             if len(response) == 0:
                 print("nor country located")
     else:
         print("no city, so locating country")
         quoted = quote(country_name)
-        response = fetch_coordinates(country_name, None)
+        response = _fetch_coordinates(country_name, None)
         if len(response) == 0:
             print("country not located")
 
@@ -83,14 +85,14 @@ def convert_to_excel(from_name, to_name):
                     country = 'United States Virgin Islands'
                 print(country)
                 if country not in ['All CSF', 'Females', 'Males']:
-                    city = find_capital(country)
+                    city = _find_capital(country)
                     if city is None:
                         print("!! processing for country")
-                        coordinates = get_coordinates(country, None)
+                        coordinates = _get_coordinates(country, None)
                     else:
                         print("processing for city")
-                        coordinates = get_coordinates(country, city)
-                    population = find_population(country)
+                        coordinates = _get_coordinates(country, city)
+                    population = _find_population(country)
                     row = {
                         'country': country,
                         'lat': coordinates['lat'],
@@ -119,3 +121,100 @@ def convert_to_excel(from_name, to_name):
 
     df = pd.DataFrame(d)
     df.to_excel(to_name)
+
+
+def legend(folium_map, sections):
+    """takes two parameters - folium map, and list of section for legend """
+
+    legend_html = '''
+    {% macro html(this, kwargs) %}
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>jQuery UI Draggable - Default functionality</title>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      
+      <script>
+      $( function() {
+        $( "#maplegend" ).draggable({
+                        start: function (event, ui) {
+                            $(this).css({
+                                right: "auto",
+                                top: "auto",
+                                bottom: "auto"
+                            });
+                        }
+                    });
+    });
+    
+      </script>
+    </head>
+    <body> 
+      <div id='maplegend' class='maplegend' 
+         style='position: absolute; z-index:9999; border:2px solid grey; background-color:rgba(255, 255, 255, 0.8);
+         border-radius:6px; padding: 10px; font-size:14px; left: 20px; bottom: 20px;'>
+         
+        <div class='legend-title'>Legend (draggable!)</div>
+          <div class='legend-scale'>
+            <ul class='legend-labels'>
+            {% for s in this.sections -%}
+              <li><span style='background:{{ s.fill_color }};opacity:0.7;'></span>{{ s.description }}</li>
+            {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+    
+    <style type='text/css'>
+      .maplegend .legend-title {
+        text-align: left;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 90%;
+        }
+      .maplegend .legend-scale ul {
+        margin: 0;
+        margin-bottom: 5px;
+        padding: 0;
+        float: left;
+        list-style: none;
+        }
+      .maplegend .legend-scale ul li {
+        font-size: 80%;
+        list-style: none;
+        margin-left: 0;
+        line-height: 18px;
+        margin-bottom: 2px;
+        }
+      .maplegend ul.legend-labels li span {
+        display: block;
+        float: left;
+        height: 16px;
+        width: 30px;
+        margin-right: 5px;
+        margin-left: 0;
+        border: 1px solid #999;
+        }
+      .maplegend .legend-source {
+        font-size: 80%;
+        color: #777;
+        clear: both;
+        }
+      .maplegend a {
+        color: #777;
+        }
+    </style>
+    {% endmacro %}
+    '''
+    macro = MacroElement()
+    macro._template = Template(legend_html)
+    macro.sections = sections
+
+    folium_map.get_root().add_child(macro)
