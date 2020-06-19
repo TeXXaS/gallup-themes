@@ -8,7 +8,7 @@ from jinja2 import Template
 
 country_re = re.compile(r'''^[A-Za-z ]+$''')
 respondents_re = re.compile(r'''^GROUP OF ([0-9]*) RESPONDENTS$''')
-result_re = re.compile(r'''^(?P<name>[A-Za-z]+) (?P<value>[0-9]+)$''')
+result_re = re.compile(r'''^(?P<name>[A-Za-z\-]+) (?P<value>[0-9]+)$''')
 
 
 def _find_capital(country_name):
@@ -163,7 +163,7 @@ def legend(folium_map, sections):
           <div class='legend-scale'>
             <ul class='legend-labels'>
             {% for s in this.sections -%}
-              <li><span style='background:{{ s.fill_color }};opacity:0.7;'></span>{{ s.description }}</li>
+              <li><span style='background:{{ s.fill_color or s.color }};opacity:0.7;'></span>{{ s.description }}</li>
             {% endfor %}
             </ul>
           </div>
